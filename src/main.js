@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import './styles/index.css'
 import store from './store';
 import Vant from 'vant';
+
 import 'vant/lib/index.less';
+
+import './styles/index.css'
 import router from './router';
 import 'amfe-flexible'
 Vue.use(Vant);

@@ -76,7 +76,7 @@ import { getUserInfo } from '@/api/user'
 import { mapState } from 'vuex'
 import { Dialog } from 'vant';
 
-Dialog({ message: '提示' });
+// Dialog({ message: '提示' });
 export default {
     name: 'MyIndex',
     components: {},
