@@ -15,7 +15,8 @@
 
             <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error"
                 error-text="请求失败，点击重新加载" @load="onLoad">
-                <van-cell v-for="(article, index) in list" :key="index" :title="article.title" />
+                <ArticleItem :article="article" v-for="(article, index) in list" :key="index"></ArticleItem>
+                <!-- <van-cell v-for="(article, index) in list" :key="index" :title="article.title" /> -->
             </van-list>
         </van-pull-refresh>
     </div>
@@ -24,9 +25,13 @@
 <script>
 import { getArticles } from '@/api/article'
 
+import ArticleItem from './article-item/index.vue'
 export default {
     name: 'ArticleList',
-    components: {},
+    components: {
+
+        ArticleItem
+    },
     props: {
         channel: {
             type: Object,
@@ -108,5 +113,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+//让每个页面都有自己的滚动位置   1vw=可视窗口宽度的百分之一。 1vh=可视高度的的百分之一
+.article-list {
+    height: 79vh; //百分百单位是相当于父元素的
+    overflow-y: auto; //
+}
 </style>
 

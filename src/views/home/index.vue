@@ -2,7 +2,7 @@
 <template>
     <div class="home-container">
         <!-- 导航栏 -->
-        <van-nav-bar class="page-nav-bar" style="background-color:#3296fa;">
+        <van-nav-bar class="page-nav-bar" fixed style="background-color:#3296fa;">
             <!-- <van-button class="search-btn" slot="title" type="info" size="small" round icon="search">搜索
             </van-button> -->
             <van-button type="info" class="search-btn cover" slot="title" size="small" icon="search" round>
@@ -71,11 +71,15 @@ export default {
 <style scoped lang="less">
 .home-container {
     padding-bottom: 100px;
+    padding-top: 174px;
 
     ::v-deep .van-nav-bar__title {
 
         max-width: unset;
     }
+
+
+
 
 
     .search-btn {
@@ -105,9 +109,18 @@ export default {
             border-right: 1px solid #edeff3;
             min-width: 200px;
             font-size: 30px;
-            color: #777777;
-
+            color: #777777
         }
+
+        .van-tabs__wrap {
+            position: fixed;
+            top: 92px;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            height: 82px;
+        }
+
 
         .van-tab--active {
             color: #333333;
