@@ -20,28 +20,42 @@
                 <!-- 文章列表 -->
             </van-tab>
             <div slot="nav-right" class="placeholder"></div>
-            <div slot="nav-right" class="hamburger-btn">
+            <div slot="nav-right" class="hamburger-btn" @click="isChennelEditShow = true">
                 <i class="iconfont icon-shanchu"></i>
             </div>
 
         </van-tabs>
         <!-- 频道列表 -->
+        <!-- 频道弹出层 -->
+
+        <van-popup v-model="isChennelEditShow" closeable position="bottom" :style="{ height: '100%' }"
+            close-icon-position="top-left">
+
+            <channel-edit :myChannels="channels" :active="active" @update-active="onUpdateActive" />
+        </van-popup>
+        <!-- 频道弹出层 -->
     </div>
 </template>
 
 <script>
-import { getPingdao, } from '@/api/user'
+import { getUserChannels, } from '@/api/user'
 import articleList from './components/article-list'
+import ChannelEdit from './components/channel-edit.vue'
 
 
 export default {
     name: 'HomeIndex',
-    components: { articleList },
+    components: {
+        articleList,
+        ChannelEdit,
+
+    },
 
     data() {
         return {
             active: 0,
             channels: [],
+            isChennelEditShow: false // 控制编辑频道弹出层的展示状态
 
         }
     },
@@ -55,7 +69,7 @@ export default {
         async loadChannels() {
 
             try {
-                const { data } = await getPingdao()
+                const { data } = await getUserChannels()
                 console.log(data.data.channels)
                 this.channels = data.data.channels
 
@@ -63,7 +77,11 @@ export default {
                 this.$toast('获取列表失败')
             }
         },
+        onUpdateActive(index, isChennelEditShow = true) {
 
+            this.active = index
+            this.isChennelEditShow = isChennelEditShow  //里面传值，默认状态为true
+        }
     }
 }
 

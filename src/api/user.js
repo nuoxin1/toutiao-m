@@ -31,9 +31,9 @@ export const getUserInfo = () => {
     })
 
 }
-export const getPingdao = () => {
+export const getUserChannels = () => {
     return request({
         method: 'GET',
-        url: '/v1_0/channels'
+        url: '/v1_0/user/channels'
     })
 }
