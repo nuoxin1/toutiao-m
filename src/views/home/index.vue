@@ -41,6 +41,8 @@
 import { getUserChannels, } from '@/api/user'
 import articleList from './components/article-list'
 import ChannelEdit from './components/channel-edit.vue'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
 
 
 export default {
@@ -59,7 +61,9 @@ export default {
 
         }
     },
-    computed: {},
+    computed: {
+        ...mapState(['user'])
+    },
     watch: {},
     created() {
         this.loadChannels()
@@ -67,11 +71,28 @@ export default {
     mounted() { },
     methods: {
         async loadChannels() {
-
+            // 1.判断是否进行了登录
             try {
-                const { data } = await getUserChannels()
-                console.log(data.data.channels)
-                this.channels = data.data.channels
+                let channels = []
+                if (this.user) {
+                    //已登录，直接请求获取用户频道列表
+                    const { data } = await getUserChannels()
+                    channels = data.data.channels
+                } else {
+                    const localChannels = getItem('TOUTIAO_CHANNELS')
+                    //判断本地有没有，有直接拿过来用
+                    if (localChannels) {
+                        channels = localChannels
+                    } else {
+                        //没有，请求获取默认列表
+                        const { data } = await getUserChannels()
+                        channels = data.data.channels
+                    }
+                }
+                this.channels = channels
+                // const { data } = await getUserChannels()
+                // console.log(data.data.channels)
+                // this.channels = data.data.channels
 
             } catch (err) {
                 this.$toast('获取列表失败')

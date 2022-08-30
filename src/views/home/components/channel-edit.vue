@@ -37,6 +37,36 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 }}</van-button>
 
         </van-cell>
@@ -68,8 +98,10 @@
 </template>
 
 <script>
-import { getAllChannels } from "@/api/channel";
+import { getAllChannels, addUserChannels, deleteUserChannels } from "@/api/channel";
 import { mapState } from "vuex";
+import { setItem } from "@/utils/storage";
+
 
 export default {
     name: 'ChannelEdit',
@@ -128,7 +160,7 @@ export default {
             this.myChannels.push(channel)
 
         },
-        onMyChannelClick(channel, index) {
+        async onMyChannelClick(channel, index) {
             if (this.isEdit) {
                 // 1. 如果是固定频道，则不删除, true 直接返回。
                 if (this.fiexChannels.includes(channel.id)) {
@@ -147,15 +179,44 @@ export default {
                 }
                 if (this.user) {
                     //已登录，把数据请求接口放到线上
+
+                    try {
+                        addUserChannels({
+                            id: channel.id,  //频道ID
+                            seq: this.myChannels.length //数组的长度
+                        })
+                    } catch (err) {
+                        this.$toast('保存失败，请稍后再试')
+                    }
+
+                } else {
+                    //未登录数据
+                    setItem('TOUTIAO_CHANNELS', this.myChannels)
                 }
 
 
                 // 4. 处理持久化
+                this.daleteChannel(channel)
 
             } else {
                 // 非编辑状态，执行切换频道
                 this.$emit('update-active', index, false)
             }
+        },
+        async daleteChannel(channel) {
+            try {
+                if (this.user) {
+                    //如果已经登录，则将数据更新到线上
+                    await deleteUserChannels(channel.id)
+                } else {
+                    //如果没有登录，就将数据更新到本地。
+                    setItem('TOUTIAO_CHANNELS', this.myChannels)  // 直接将数据重新存储一篇。
+                }
+            } catch (err) {
+                this.$toast('操作失败，请稍后重试')
+                console.log(err)
+            }
+
         }
     }
 }
