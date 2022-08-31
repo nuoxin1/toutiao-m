@@ -5,7 +5,7 @@
         <van-nav-bar class="page-nav-bar" fixed style="background-color:#3296fa;">
             <!-- <van-button class="search-btn" slot="title" type="info" size="small" round icon="search">搜索
             </van-button> -->
-            <van-button type="info" class="search-btn cover" slot="title" size="small" icon="search" round>
+            <van-button type="info" class="search-btn cover" slot="title" size="small" icon="search" round to="/search">
                 搜索
             </van-button>
         </van-nav-bar>
