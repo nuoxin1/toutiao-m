@@ -2,7 +2,7 @@
 <template>
     <div class="search-result">
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell v-for="item in list" :key="item" :title="item" />
+            <van-cell v-for="(article, index) in list" :key="index" :title="article.title" />
         </van-list>
 
 
@@ -12,15 +12,24 @@
 </template>
 
 <script>
+import { suggestionResult } from '@/api/search'
 export default {
     name: 'SearchResult',
     components: {},
-    props: {},
+    props: {
+        searchText: {
+            type: String,
+            required: true
+        },
+
+    },
     data() {
         return {
             list: [],
             loading: false,
             finished: false,
+            page: 1,
+            perPage: 20,
         }
     },
     computed: {},
@@ -28,22 +37,36 @@ export default {
     created() { },
     mounted() { },
     methods: {
-        onLoad() {
-            // 异步更新数据
-            // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-            setTimeout(() => {
-                for (let i = 0; i < 10; i++) {
-                    this.list.push(this.list.length + 1);
+        async onLoad() {
+            //1.请求获取数据
+            try {
+                const { data } = await suggestionResult({
+                    page: this.page,// 页数，默认不传为1
+                    per_page: this.page, //每页数量，不传每页数量由后端决定
+                    q: this.searchText, //搜索的关键词，就是searchText
+                })
+                //2.将数据添加到数组当中
+                const { results } = data.data
+
+                this.list.push(...results) //结果是一个数组，用...进行展开，把每一个数据用数组push方法进行添加到数组当中
+                //3.将本次加载中的loading关闭
+                this.loading = false
+                //4.判断是否还有数据，如果有则更新下一个数据的页码，如果没有则将加载状态finished设置为ture
+                if (results.length) {
+                    this.page++
+
+                } else {
+                    this.finished = true
                 }
 
-                // 加载状态结束
-                this.loading = false;
+            } catch (err) {
+                // 展示加载失败的提示状态
+                this.error = true
 
-                // 数据全部加载完成
-                if (this.list.length >= 40) {
-                    this.finished = true;
-                }
-            }, 1000);
+                // 加载失败了 loading 也要关闭
+                this.loading = false
+            }
+
         },
     },
 }
