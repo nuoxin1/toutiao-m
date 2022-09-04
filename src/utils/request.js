@@ -3,8 +3,21 @@
  */
 import axios from "axios"
 import store from "@/store"
+import JSONBig from 'json-bigint'
+
+// JSONBig.stringify() 是把javascript转换成JSON的格式的字符串
+// JSONBig.parse( ) 是把JSON的字符串转换为javascript对象
 const request = axios.create({
-    baseURL: "http://toutiao.itheima.net"
+
+    baseURL: "http://toutiao.itheima.net",
+    transformResponse: [function (data) {
+        // return data       //AXIOS 默认会在内部转换返回前段数据，JSON.parse(data)
+        try {
+            return JSONBig.parse(data)
+        } catch (err) {
+            return data
+        }
+    }]
 })
 // 请求拦截器
 // Add a request interceptor

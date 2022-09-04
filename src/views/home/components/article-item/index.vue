@@ -1,7 +1,16 @@
 <!--  -->
 <template>
 
-    <van-cell class="article-item">
+    <van-cell class="article-item" :to="`/article/${article.art_id}`">
+        <!-- :to 是动态路由，后面地址要拼接上文章ID -->
+        <!-- 或者第二种方法 :to后面接一各对象，name 跟里面params 跟路由设置里面的一样
+        :to="{
+         name:article,
+         params:{
+            articleId:article.art_id，
+         }
+        }"
+        -->
         <div slot="title" class="title van-multi-ellipsis--l2">
             {{ article.title }}
         </div>
