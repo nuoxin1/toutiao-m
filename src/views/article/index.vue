@@ -66,8 +66,10 @@
                 <div class="article-content markdown-body" v-html="article.content" ref="article-content"></div>
                 <van-divider>正文结束</van-divider>
                 <!-- 文章评论列表 -->
-                <!-- <comment-list :source="article.art_id" :list="commentList"
-                    @onload-success="totalCommentCount = $event.total_count" /> -->
+                <comment-list :source="article.art_id" @onload-success="totalCommentCount = $event.total_count"
+                    :list="commentList" @reply-click="onReplyClick" />
+                <!-- :source="article.art_id" :list="commentList"
+                @onload-success="totalCommentCount = $event.total_count" -->
                 <!-- /文章评论列表 -->
                 <!-- 底部区域 -->
                 <div class="article-bottom">
@@ -83,9 +85,9 @@
                 <!-- /底部区域 -->
 
                 <!-- 发布评论 -->
-                <!-- <van-popup v-model="isPostShow" position="bottom">
+                <van-popup v-model="isPostShow" position="bottom">
                     <comment-post :target="article.art_id" @post-success="onPostSuccess" />
-                </van-popup> -->
+                </van-popup>
                 <!-- 发布评论 -->
             </div>
             <!-- /加载完成-文章详情 -->
@@ -105,6 +107,14 @@
             </div>
             <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
         </div>
+        <!-- 评论回复 -->
+        <!-- position是有下往上，占比100%高 -->
+        <van-popup v-model="isReplyShow" position="bottom" style="height:100%;">
+            123
+        </van-popup>
+
+
+        <!-- 评论回复/ -->
     </div>
 </template>
 
@@ -114,13 +124,16 @@ import { ImagePreview } from 'vant'
 import FollowUser from '@/components/follow-user'
 import CollectArticle from '@/components/collect-article/index.vue'
 import LikeArticle from '@/components/like-article/index.vue'
-
+import CommentList from '@/views/article/components/conment-list..vue'
+import CommentPost from '@/views/article/components/comment-post.vue'
 export default {
     name: 'ArticleIndex',
     components: {
         FollowUser,
         CollectArticle,
-        LikeArticle
+        LikeArticle,
+        CommentList,
+        CommentPost,
 
     },
     props: {
@@ -137,7 +150,8 @@ export default {
             followLoading: false,
             totalCommentCount: 0,
             isPostShow: false, // 控制发布评论的显示状态
-            commentList: [] // 评论列表
+            commentList: [], // 评论列表
+            isReplyShow: false,
         }
     },
     computed: {},
@@ -204,9 +218,13 @@ export default {
 
         onPostSuccess(data) {
             // 关闭弹出层
-            this.isPostShow = false
+            se
             // 将发布内容显示到列表顶部
             this.commentList.unshift(data.new_obj)
+        },
+        onReplyClick(comment) {
+            console.log(comment)
+            this.isReplyShow = true
         }
     }
 }
