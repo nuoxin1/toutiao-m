@@ -1,7 +1,8 @@
 <!--  -->
 <template>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :error="error"
-        error-text="加载失败，点击重试">
+        error-text="加载失败，点击重试" :immediate-check="false">
+        <!-- immediate-check='false' 在初始化时取消立即执行滚动位置检查 -->
         <CommentItem v-for="(item, index) in list" :key="index" :comment="item"
             @reply-click="$emit('reply-click',$event)" />
     </van-list>
@@ -27,6 +28,15 @@ export default {
             default: () => {
                 return []  //默认值是数组或者是对象时候就必须是函数return
             }
+        },
+        type: {
+            type: String,
+            //自定义prop数据验证
+            validator(value) {
+                return ['a', 'c'].includes(value)
+            },
+            default: 'a',
+
         }
     },
     data() {
@@ -42,6 +52,7 @@ export default {
     computed: {},
     watch: {},
     created() {
+        this.loading = true  //慢速网络需要手动开启loading
         this.onLoad()
     },
     mounted() { },
@@ -49,10 +60,12 @@ export default {
         async onLoad() {
 
             //1.请求数据
+            //获取文章的评论跟获取评论回复的接口一样，，区别是接口参数不一样， type：a是文章评论,C是评论的回复。
+            //source: 文章的评论，则传递文章的ID，评论的回复，则传递评论的ID
             try {
                 const { data } = await getComment({
-                    source: this.source,
-                    type: 'a',
+                    source: this.source, //
+                    type: this.type,
                     limit: this.limit,
                     offset: this.offset
                 })
@@ -88,4 +101,5 @@ export default {
 
 </script>
 <style scoped lang="less">
+
 </style>

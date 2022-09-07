@@ -108,9 +108,13 @@
             <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
         </div>
         <!-- 评论回复 -->
+        <!-- 弹出层是懒渲染的，只有在第一次展示的时候进行加载，后面都是进行数据显示的切换。导致打开回复后点每一个数据都是一样。
+         解决办法，就是关闭弹出层后，里面的数据也让消失。  用V-if条件渲染，为true的时候进行渲染元素节点。就是让comment-reply弹出层关闭，就销毁 -->
         <!-- position是有下往上，占比100%高 -->
         <van-popup v-model="isReplyShow" position="bottom" style="height:100%;">
-            123
+            <comment-reply :comment="currentComment" @click-close="isReplyShow = false" v-if="isReplyShow" />
+
+
         </van-popup>
 
 
@@ -126,6 +130,7 @@ import CollectArticle from '@/components/collect-article/index.vue'
 import LikeArticle from '@/components/like-article/index.vue'
 import CommentList from '@/views/article/components/conment-list..vue'
 import CommentPost from '@/views/article/components/comment-post.vue'
+import CommentReply from '@/views/article/components/comment-reply.vue'
 export default {
     name: 'ArticleIndex',
     components: {
@@ -134,12 +139,18 @@ export default {
         LikeArticle,
         CommentList,
         CommentPost,
+        CommentReply,
 
     },
     props: {
         articleId: {
             type: [Number, String, Object],
             required: true
+        }
+    },
+    provide() {
+        return {
+            articleId: this.articleId
         }
     },
     data() {
@@ -152,6 +163,7 @@ export default {
             isPostShow: false, // 控制发布评论的显示状态
             commentList: [], // 评论列表
             isReplyShow: false,
+            currentComment: [],//当前点击评论项目
         }
     },
     computed: {},
@@ -218,12 +230,12 @@ export default {
 
         onPostSuccess(data) {
             // 关闭弹出层
-            se
+            this.isPostShow = false
             // 将发布内容显示到列表顶部
             this.commentList.unshift(data.new_obj)
         },
         onReplyClick(comment) {
-            console.log(comment)
+            this.currentComment = comment // 将数据储存起来。
             this.isReplyShow = true
         }
     }

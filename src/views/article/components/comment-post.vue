@@ -18,6 +18,7 @@ export default {
             required: true,
         }
     },
+    inject: ['articleId'],
     data() {
         return {
             message: ''
@@ -37,9 +38,9 @@ export default {
             })
             try {
                 const { data } = await addComment({
-                    target: this.target,
+                    target: this.target.toString(),
                     content: this.message,
-                    art_id: this.target,
+                    art_id: this.articleId ? this.articleId.toString() : null,
                 })
                 this.$toast('发布成功')
                 //1.关闭弹出层
