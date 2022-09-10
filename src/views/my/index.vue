@@ -9,7 +9,7 @@
                     <span class="name">{{ userInfo.name }}</span>
                 </div>
                 <div class="right">
-                    <van-button size="mini" round>编辑资料</van-button>
+                    <van-button size="mini" round to="/user">编辑资料</van-button>
                 </div>
             </div>
             <div class="data-stats">
@@ -106,6 +106,7 @@ export default {
                 this.userInfo = data.data
             } catch (err) {
                 this.$toast('获取数据失败')
+                this.$router.push('/login')
             }
         },
         onLogout() {

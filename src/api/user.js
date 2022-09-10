@@ -54,4 +54,29 @@ export const deleteFollow = (target) => {
         url: `/v1_0/user/followings/${target}`,
 
     })
+}//获取用户个人信息
+export const getUerPerInfo = () => {
+    return request({
+        method: 'GET',
+        url: '/v1_0/user/profile',
+
+    })
+}
+//编辑用户个人信息
+export const updateInfo = data => {
+    return request({
+        method: 'PATCH',
+        url: '/v1_0/user/profile',
+        data
+
+    })
+}
+//编辑用户头像的
+export const updatePhoto = data => {
+    return request({
+        method: 'PATCH',
+        url: '/v1_0/user/photo',
+        data
+
+    })
 }
