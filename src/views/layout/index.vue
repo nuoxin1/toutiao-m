@@ -7,7 +7,7 @@
 
         <!-- 标签导航栏 -->
         <van-tabbar class="layout-tabbar" route>
-            <van-tabbar-item to='/home'>
+            <van-tabbar-item to='/'>
                 <i slot='icon' class="iconfont icon-shouye"></i>
                 <span class="text"> 首页 </span>
             </van-tabbar-item>
@@ -35,7 +35,7 @@ export default {
     props: {},
     data() {
         return {
-
+            active: 0
         }
     },
     computed: {},

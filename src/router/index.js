@@ -9,11 +9,11 @@ const routes = [
     },
     {
         path: '/',
-        neme: 'layout',
+        // neme: 'layout',
         component: () => import('@/views/layout'),
         children: [
             {
-                path: '/home', // 默认子路由
+                path: '', // 默认子路由
                 name: 'home',
                 component: () => import('@/views/home')
             },

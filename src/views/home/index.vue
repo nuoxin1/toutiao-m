@@ -21,7 +21,7 @@
             </van-tab>
             <div slot="nav-right" class="placeholder"></div>
             <div slot="nav-right" class="hamburger-btn" @click="isChennelEditShow = true">
-                <i class="iconfont icon-shanchu"></i>
+                <i class="iconfont icon-gengduo"></i>
             </div>
 
         </van-tabs>
@@ -46,7 +46,7 @@ import { getItem } from '@/utils/storage'
 
 
 export default {
-    name: 'HomeIndex',
+    name: 'home',
     components: {
         articleList,
         ChannelEdit,
